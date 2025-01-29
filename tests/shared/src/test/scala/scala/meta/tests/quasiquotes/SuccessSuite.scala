@@ -13,7 +13,16 @@ import scala.meta.trees.Origin
 // test("1 p\"case $x: T => \"") { ... } and test("1 p\"case $x @ $y => \"") { .. }.
 
 class SuccessSuite extends TreeSuiteBase {
-  test("rank-0 liftables") {
+  val imports1 = List(q"import foo.bar.*")
+
+  // Does not compile
+  val imports2 = List(
+    q"import foo.bar.*",
+  )
+
+  test("rank-0 liftables".only) {
+    val a = param"x: Int"
+    println(q"case class Foo($a) // foo".pos)
     assertTree(q"foo[${42}]")(tapplytype(tname("foo"), int(42)))
     assertTree(q"${42}")(int(42))
   }
